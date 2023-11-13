@@ -1512,13 +1512,13 @@ Readability.prototype = {
     }
 
     // get author
-    metadata.byline = jsonld.byline ||
+    metadata.author = jsonld.byline ||
                       values["dc:creator"] ||
                       values["dcterm:creator"] ||
                       values["author"];
 
     // get description
-    metadata.excerpt = jsonld.excerpt ||
+    metadata.description = jsonld.excerpt ||
                        values["dc:description"] ||
                        values["dcterm:description"] ||
                        values["og:description"] ||
@@ -1534,8 +1534,8 @@ Readability.prototype = {
     // in many sites the meta value is escaped with HTML entities,
     // so here we need to unescape it
     metadata.title = this._unescapeHtmlEntities(metadata.title);
-    metadata.byline = this._unescapeHtmlEntities(metadata.byline);
-    metadata.excerpt = this._unescapeHtmlEntities(metadata.excerpt);
+    metadata.author = this._unescapeHtmlEntities(metadata.author);
+    metadata.description = this._unescapeHtmlEntities(metadata.description);
     metadata.siteName = this._unescapeHtmlEntities(metadata.siteName);
 
     return metadata;
@@ -2256,23 +2256,23 @@ Readability.prototype = {
     // If we haven't found an excerpt in the article's metadata, use the article's
     // first paragraph as the excerpt. This is used for displaying a preview of
     // the article's content.
-    if (!metadata.excerpt) {
+    if (!metadata.description) {
       var paragraphs = articleContent.getElementsByTagName("p");
       if (paragraphs.length > 0) {
-        metadata.excerpt = paragraphs[0].textContent.trim();
+        metadata.description = paragraphs[0].textContent.trim();
       }
     }
 
     var textContent = articleContent.textContent;
     return {
       title: this._articleTitle,
-      byline: metadata.byline || this._articleByline,
+      byline: metadata.author || this._articleByline,
       dir: this._articleDir,
       lang: this._articleLang,
       content: this._serializer(articleContent),
       textContent: textContent,
       length: textContent.length,
-      excerpt: metadata.excerpt,
+      excerpt: metadata.description,
       siteName: metadata.siteName || this._articleSiteName
     };
   }
